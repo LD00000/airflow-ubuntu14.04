@@ -3,7 +3,9 @@
 
 FROM ubuntu:14.04
 
-MAINTAINER ld00000 "lidong9144@gmail.com"		
+MAINTAINER ld00000 <lidong9144@gmail.com>
+
+ENV AIRFLOW_HOME /airflow
 
 RUN apt-get update
 RUN echo y | apt-get install wget
@@ -17,11 +19,10 @@ RUN apt-get install zlib1g-dev
 RUN echo y | apt-get install libevent-dev
 
 # install airflow
-ENV AIRFLOW_HOME ~/airflow
 RUN pip install airflow==1.7.1.3
-RUN pip install "airflow[hive,hdfs,jdbc]"
-RUN airflow initdb
+
+ADD script/entrypoint.sh ${AIRFLOW_HOME}/entrypoint.sh 
 
 EXPOSE 8080
-
-ENTRYPOINT airflow webserver -p 8080 &
+WORKDIR ${AIRFLOW_HOME}
+ENTRYPOINT ["./entrypoint.sh"]
