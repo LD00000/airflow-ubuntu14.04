@@ -22,7 +22,8 @@ RUN echo y | apt-get install libevent-dev
 RUN pip install airflow==1.7.1.3
 
 ADD script/entrypoint.sh ${AIRFLOW_HOME}/entrypoint.sh 
+ADD conf/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
-EXPOSE 8080
+EXPOSE 8080 5555 8793
 WORKDIR ${AIRFLOW_HOME}
 ENTRYPOINT ["./entrypoint.sh"]
