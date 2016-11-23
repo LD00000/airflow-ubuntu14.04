@@ -1,6 +1,46 @@
 version: '2'
 services:
-  airflow: 
-    build: .
-    ports: 
-     - "8082:8080"
+    webserver: 
+        build: .
+        restart: always
+        volumes:
+            - /home/ld000/dags:/airflow/dags
+        ports: 
+            - "8082:8080"
+        command: webserver
+
+#    flower:
+#        image: puckel/docker-airflow:1.7.1.3-5
+#        restart: always
+#        depends_on:
+#            - rabbitmq
+#        environment:
+#            - EXECUTOR=Celery
+#        ports:
+#            - "5555:5555"
+#        command: flower
+
+    scheduler:
+        build: .
+        restart: always
+        depends_on:
+            - webserver
+        # volumes:
+        #     - /localpath/to/dags:/usr/local/airflow/dags
+        environment:
+            # - LOAD_EX=n
+            - FERNET_KEY=9IoTgQ_EJ0hCsamBU3Mctc7F9OkODnndOKCwkwXCAA
+            - EXECUTOR=Celery
+        command: scheduler -n 5
+
+    worker:
+        build: .
+        restart: always
+        depends_on:
+            - scheduler
+        # volumes:
+        #     - /localpath/to/dags:/usr/local/airflow/dags
+        environment:
+            - FERNET_KEY=9IoTgQ_EJ0hCsamBU3Mctc7F9OkODnndOKCwkwXCAA
+            - EXECUTOR=Celery
+        command: worker
