@@ -1,11 +1,11 @@
 version: '2'
 services:
-    webserver: 
+    webserver:
         build: .
         restart: always
         volumes:
-            - /home/ld000/dags:/airflow/dags
-        ports: 
+            - ~/dags:/airflow/dags
+        ports:
             - "8082:8080"
         command: webserver
 
