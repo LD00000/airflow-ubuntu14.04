@@ -4,6 +4,10 @@ MAINTAINER ld00000 <lidong9144@163.com>
 
 ARG AIRFLOW_VERSION=1.7.1.3
 ENV AIRFLOW_HOME /airflow
+ENV TZ Asia/Shanghai
+
+# timezone
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get autoclean && apt-get --purge -y autoremove && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak
