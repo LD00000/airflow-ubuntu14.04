@@ -1,5 +1,13 @@
 version: '2'
 services:
+    mysql:
+        build: mysql/
+        environment:
+            - MYSQL_USER=airflow
+            - MYSQL_PASSWORD=airflow
+            - MYSQL_DATABASE=airflow
+            - MYSQL_ROOT_PASSWORD=airflow
+
     rabbitmq:
         image: rabbitmq:3.6-management
         restart: always
@@ -16,6 +24,9 @@ services:
         restart: always
         depends_on:
             - rabbitmq
+            - mysql
+        environment:
+            - EXECUTOR=Celery
         volumes:
             - ~/dags:/airflow/dags
         ports:
@@ -42,7 +53,6 @@ services:
         #     - /localpath/to/dags:/usr/local/airflow/dags
         environment:
             # - LOAD_EX=n
-            - FERNET_KEY=9IoTgQ_EJ0hCsamBU3Mctc7F9OkODnndOKCwkwXCAA
             - EXECUTOR=Celery
         command: scheduler -n 5
 
@@ -54,6 +64,5 @@ services:
         # volumes:
         #     - /localpath/to/dags:/usr/local/airflow/dags
         environment:
-            - FERNET_KEY=9IoTgQ_EJ0hCsamBU3Mctc7F9OkODnndOKCwkwXCAA
             - EXECUTOR=Celery
         command: worker

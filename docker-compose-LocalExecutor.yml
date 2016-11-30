@@ -1,0 +1,35 @@
+version: '2'
+services:
+    mysql:
+        build: mysql/
+        environment:
+            - MYSQL_USER=airflow
+            - MYSQL_PASSWORD=airflow
+            - MYSQL_DATABASE=airflow
+            - MYSQL_ROOT_PASSWORD=airflow
+
+    webserver:
+        build: .
+        restart: always
+        depends_on:
+            - mysql
+        environment:
+            - EXECUTOR=Local
+        volumes:
+            - ~/dags:/airflow/dags
+        ports:
+            - "8082:8080"
+        command: webserver
+
+    scheduler:
+        build: .
+        restart: always
+        depends_on:
+            - webserver
+        # volumes:
+        #     - /localpath/to/dags:/usr/local/airflow/dags
+        environment:
+            # - LOAD_EX=n
+            - FERNET_KEY=9IoTgQ_EJ0hCsamBU3Mctc7F9OkODnndOKCwkwXCAA
+            - EXECUTOR=Local
+        command: scheduler -n 5
