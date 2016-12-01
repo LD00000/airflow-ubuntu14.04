@@ -9,7 +9,7 @@ services:
             - MYSQL_ROOT_PASSWORD=airflow
 
     webserver:
-        build: .
+        build: airflow/
         restart: always
         depends_on:
             - mysql
@@ -22,7 +22,7 @@ services:
         command: webserver
 
     scheduler:
-        build: .
+        build: airflow/
         restart: always
         depends_on:
             - webserver

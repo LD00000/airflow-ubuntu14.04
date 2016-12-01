@@ -2,8 +2,6 @@ version: '2'
 services:
     mysql:
         build: mysql/
-        volumes:
-            - /etc/localtime:/etc/localtime:ro
         environment:
             - MYSQL_USER=airflow
             - MYSQL_PASSWORD=airflow
@@ -13,8 +11,6 @@ services:
     rabbitmq:
         image: rabbitmq:3.6-management
         restart: always
-        volumes:
-            - /etc/localtime:/etc/localtime:ro
         ports:
             - "15672:15672"
             - "5672:5672"
@@ -24,7 +20,7 @@ services:
             - RABBITMQ_DEFAULT_VHOST=airflow
 
     webserver:
-        build: .
+        build: airflow/
         restart: always
         depends_on:
             - rabbitmq
@@ -33,19 +29,17 @@ services:
             - EXECUTOR=Celery
         volumes:
             - ~/dags:/airflow/dags
-            - /etc/localtime:/etc/localtime:ro
         ports:
             - "8082:8080"
         command: webserver
 
     flower:
-        build: .
+        build: airflow/
         restart: always
         depends_on:
             - rabbitmq
         volumes:
             - ~/dags:/airflow/dags
-            - /etc/localtime:/etc/localtime:ro
         environment:
             - EXECUTOR=Celery
         ports:
@@ -53,26 +47,26 @@ services:
         command: flower
 
     scheduler:
-        build: .
+        build: airflow/
         restart: always
         depends_on:
             - webserver
+            - mysql
         volumes:
             - ~/dags:/airflow/dags
-            - /etc/localtime:/etc/localtime:ro
         environment:
             # - LOAD_EX=n
             - EXECUTOR=Celery
         command: scheduler -n 5
 
     worker:
-        build: .
+        build: airflow/
         restart: always
         depends_on:
             - scheduler
+            - mysql
         volumes:
             - ~/dags:/airflow/dags
-            - /etc/localtime:/etc/localtime:ro
         environment:
             - EXECUTOR=Celery
         command: worker
