@@ -5,7 +5,7 @@ MAINTAINER ld00000 <lidong9144@163.com>
 ARG AIRFLOW_VERSION=1.7.1.3
 ENV AIRFLOW_HOME /airflow
 
-RUN apt-get autoclean && apt-get --purge -y autoremove && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get autoclean && apt-get --purge -y autoremove
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak
 ADD conf/163-sources.list /etc/apt/sources.list
 
@@ -28,6 +28,7 @@ RUN echo y | apt-get install \
                 libsasl2-dev \
                 libssl-dev \
                 libffi-dev \
+                libpq-dev \
                 build-essential \
                 libblas-dev \
                 liblapack-dev \
@@ -47,6 +48,7 @@ RUN pip install -i http://pypi.douban.com/simple/ Cython \
     && pip install -i http://pypi.douban.com/simple/ pyOpenSSL \
     && pip install -i http://pypi.douban.com/simple/ ndg-httpsclient \
     && pip install -i http://pypi.douban.com/simple/ pyasn1 \
+    && pip install -i http://pypi.douban.com/simple/ psycopg2 \
     && pip install -i http://pypi.douban.com/simple/ pandas==0.18.1 \
     && pip install -i http://pypi.douban.com/simple/ celery==3.1.23 \
     && pip install -i http://pypi.douban.com/simple/ airflow[mysql,celery,hive,hdfs,jdbc]==$AIRFLOW_VERSION

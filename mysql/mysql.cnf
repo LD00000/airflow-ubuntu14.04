@@ -1,1 +1,4 @@
 [mysqld]
+log_timestamps=SYSTEM
+interactive_timeout=100
+max_connections=1024

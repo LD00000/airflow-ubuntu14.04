@@ -1,12 +1,19 @@
 version: '2'
 services:
-    mysql:
-        build: mysql/
+    postgres:
+        build: postgres/
         environment:
-            - MYSQL_USER=airflow
-            - MYSQL_PASSWORD=airflow
-            - MYSQL_DATABASE=airflow
-            - MYSQL_ROOT_PASSWORD=airflow
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+
+    # mysql:
+    #     build: mysql/
+    #     environment:
+    #         - MYSQL_USER=airflow
+    #         - MYSQL_PASSWORD=airflow
+    #         - MYSQL_DATABASE=airflow
+    #         - MYSQL_ROOT_PASSWORD=airflow
 
     rabbitmq:
         image: rabbitmq:3.6-management
@@ -24,8 +31,9 @@ services:
         restart: always
         depends_on:
             - rabbitmq
-            - mysql
+            - postgres
         environment:
+            - INIT_DB=y
             - EXECUTOR=Celery
         volumes:
             - ~/dags:/airflow/dags
@@ -51,7 +59,6 @@ services:
         restart: always
         depends_on:
             - webserver
-            - mysql
         volumes:
             - ~/dags:/airflow/dags
         environment:
@@ -64,7 +71,6 @@ services:
         restart: always
         depends_on:
             - scheduler
-            - mysql
         volumes:
             - ~/dags:/airflow/dags
         environment:
