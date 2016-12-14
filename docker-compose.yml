@@ -27,7 +27,7 @@ services:
             - RABBITMQ_DEFAULT_VHOST=airflow
 
     webserver:
-        image: ld00000/docker-airflow:0.1.0
+        image: ld00000/docker-airflow:0.1.1
         restart: always
         depends_on:
             - rabbitmq
@@ -42,7 +42,7 @@ services:
         command: webserver
 
     flower:
-        image: ld00000/docker-airflow:0.1.0
+        image: ld00000/docker-airflow:0.1.1
         restart: always
         depends_on:
             - rabbitmq
@@ -55,7 +55,7 @@ services:
         command: flower
 
     scheduler:
-        image: ld00000/docker-airflow:0.1.0
+        image: ld00000/docker-airflow:0.1.1
         restart: always
         depends_on:
             - webserver
@@ -67,7 +67,7 @@ services:
         command: scheduler -n 5
 
     worker:
-        image: ld00000/docker-airflow:0.1.0
+        image: ld00000/docker-airflow:0.1.1
         restart: always
         depends_on:
             - scheduler

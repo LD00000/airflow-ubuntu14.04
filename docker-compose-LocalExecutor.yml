@@ -16,7 +16,7 @@ services:
     #         - MYSQL_ROOT_PASSWORD=airflow
 
     webserver:
-        image: ld00000/docker-airflow:0.1.0
+        image: ld00000/docker-airflow:0.1.1
         restart: always
         depends_on:
             - postgres
@@ -31,7 +31,7 @@ services:
         command: webserver
 
     scheduler:
-        image: ld00000/docker-airflow:0.1.0
+        image: ld00000/docker-airflow:0.1.1
         restart: always
         depends_on:
             - webserver
