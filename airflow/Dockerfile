@@ -85,6 +85,7 @@ RUN apt-get clean \
 
 COPY script/entrypoint.sh ${AIRFLOW_HOME}/entrypoint.sh
 COPY conf/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+COPY script/authentication.py ${AIRFLOW_HOME}/authentication.py
 
 EXPOSE 8080 5555 8793
 
@@ -92,7 +93,8 @@ RUN groupadd -r airflow && useradd -r -g airflow airflow
 RUN (echo "airflow";sleep 1;echo "airflow") | passwd airflow > /dev/null
 
 RUN chown -R airflow: ${AIRFLOW_HOME} \
-    && chmod +x ${AIRFLOW_HOME}/entrypoint.sh
+    && chmod +x ${AIRFLOW_HOME}/entrypoint.sh \
+    && chmod +x ${AIRFLOW_HOME}/authentication.py
 
 USER airflow
 WORKDIR ${AIRFLOW_HOME}

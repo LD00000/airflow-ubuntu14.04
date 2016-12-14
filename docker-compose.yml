@@ -33,6 +33,7 @@ services:
             - rabbitmq
             - postgres
         environment:
+            - AUTH=y
             - INIT_DB=y
             - EXECUTOR=Celery
         volumes:
