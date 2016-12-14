@@ -16,7 +16,7 @@ services:
     #         - MYSQL_ROOT_PASSWORD=airflow
 
     rabbitmq:
-        image: rabbitmq:3.6-management
+        build: rabbitmq/
         restart: always
         ports:
             - "15672:15672"
@@ -27,7 +27,7 @@ services:
             - RABBITMQ_DEFAULT_VHOST=airflow
 
     webserver:
-        build: airflow/
+        image: ld00000/docker-airflow:0.1.0
         restart: always
         depends_on:
             - rabbitmq
@@ -42,7 +42,7 @@ services:
         command: webserver
 
     flower:
-        build: airflow/
+        image: ld00000/docker-airflow:0.1.0
         restart: always
         depends_on:
             - rabbitmq
@@ -55,7 +55,7 @@ services:
         command: flower
 
     scheduler:
-        build: airflow/
+        image: ld00000/docker-airflow:0.1.0
         restart: always
         depends_on:
             - webserver
@@ -67,7 +67,7 @@ services:
         command: scheduler -n 5
 
     worker:
-        build: airflow/
+        image: ld00000/docker-airflow:0.1.0
         restart: always
         depends_on:
             - scheduler
