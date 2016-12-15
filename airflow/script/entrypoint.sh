@@ -23,6 +23,11 @@ if [ -e "/requirements.txt" ]; then
     $(which pip) install --user -r /requirements.txt
 fi
 
+if [ "x$AUTH" = "xy" ]; then
+    echo "authentication..."
+    exec python ${AIRFLOW_HOME}/authentication.py
+fi
+
 # wait for DB
 if [ "$1" = "webserver" ] || [ "$1" = "worker" ] || [ "$1" = "scheduler" ] ; then
     i=0
@@ -72,8 +77,4 @@ else
     echo "Initialize database..."
     $CMD initdb
     exec $CMD webserver
-fi
-
-if [ "x$AUTH" = "xy" ]; then
-    python ${AIRFLOW_HOME}/authentication.py
 fi
