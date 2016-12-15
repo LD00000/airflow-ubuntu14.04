@@ -43,6 +43,7 @@ RUN echo y | apt-get install python3-dev python-pip python-dev
 # install airflow
 # RUN easy_install -U setuptools
 RUN pip install -i http://pypi.douban.com/simple/ Cython \
+    && pip install -i http://pypi.douban.com/simple/ flask-bcrypt \
     && pip install -i http://pypi.douban.com/simple/ pytz==2015.7 \
     && pip install -i http://pypi.douban.com/simple/ cryptography \
     && pip install -i http://pypi.douban.com/simple/ pyOpenSSL \
