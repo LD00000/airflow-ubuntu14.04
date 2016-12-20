@@ -58,11 +58,11 @@ then
       sleep 5
     done
     fi
-    exec $CMD "$@" | python ${AIRFLOW_HOME}/authentication.py
+    exec $CMD "$@"
 elif [ "x$EXECUTOR" = "xLocal" ]
 then
     sed -i "s/executor = CeleryExecutor/executor = LocalExecutor/" "$AIRFLOW_HOME"/airflow.cfg
-    exec $CMD "$@" | python ${AIRFLOW_HOME}/authentication.py
+    exec $CMD "$@"
 else
     if [ "$1" = "version" ]; then
         exec $CMD version
@@ -71,5 +71,5 @@ else
     sed -i "s#sql_alchemy_conn = mysql://root:root@192.168.130.64:3306/airflow#sql_alchemy_conn = sqlite:////usr/local/airflow/airflow.db#" "$AIRFLOW_HOME"/airflow.cfg
     echo "Initialize database..."
     $CMD initdb
-    exec $CMD webserver | python ${AIRFLOW_HOME}/authentication.py
+    exec $CMD webserver
 fi
